@@ -1,0 +1,1 @@
+conda list -n review_analyzer -e > conda_req.txt
