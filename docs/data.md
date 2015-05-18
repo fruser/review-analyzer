@@ -6,7 +6,10 @@
   "asin": "0000013714",
   "reviewerName": "J. McDonald",
   "helpful": [2, 3],
-  "reviewText": "I bought this for my husband who plays the piano.  He is having a wonderful time playing these old hymns.  The music  is at times hard to read because we think the book was published for singing from more than playing from.  Great purchase though!",
+  "reviewText": "I bought this for my husband who plays the piano.  He is
+   having a wonderful time playing these old hymns.  The music  is at times
+   hard to read because we think the book was published for singing from more
+   than playing from.  Great purchase though!",
   "overall": 5.0,
   "summary": "Heavenly Highway Hymns",
   "unixReviewTime": 1252800000,
