@@ -1,6 +1,7 @@
 ## Basic dataset analysis
  * Total number of reviews is `4628130`
- * Total number of unique users in the dataset is 2088647
+ * Total number of unique users in the dataset is `2088647`
+ * Total User/Reviews Pairs: `2088647`
  * Top 10 users who left the most number of reviews (`user | #reviews`):
 
    ```
