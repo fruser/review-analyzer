@@ -2,6 +2,7 @@
  * Total number of reviews is `4628130`
  * Total number of unique users in the dataset is 2088647
  * Top 10 users who left the most number of reviews (`user | #reviews`):
+
    ```
    AV6QDP8Q0ONK4 | 2686
    A16CZRQL23NOIW | 2665
