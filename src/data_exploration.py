@@ -1,6 +1,7 @@
 __author__ = 'Timur Gladkikh'
 from collections import defaultdict
 import json
+from operator import itemgetter
 from data_loader import *
 
 def users_reviews_count(reviews):
@@ -9,7 +10,8 @@ def users_reviews_count(reviews):
     for i in range(0, len(reviews)):
         review = reviews['{0}'.format(i)]
         usr_review[review['reviewerID']] += 1
-    json.dump(usr_review, open(path, 'w'))
+    sorted_dict = sorted(usr_review.items(), key=itemgetter(1), reverse=True)
+    json.dump(sorted_dict, open(path, 'w'))
 
 
 def reviews_count(reviews):
