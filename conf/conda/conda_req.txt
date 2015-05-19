@@ -17,8 +17,10 @@ numba=0.18.2=np19py34_1
 numpy=1.9.2=py34_0
 pandas=0.16.1=np19py34_0
 pip=6.1.1=py34_0
+py=1.4.26=py34_0
 pygments=2.0.2=py34_0
 pyreadline=2.0=py34_0
+pytest=2.7.0=py34_0
 python=3.4.3=0
 python-dateutil=2.4.2=py34_0
 pytz=2015.4=py34_0
@@ -29,5 +31,6 @@ scikit-learn=0.16.1=np19py34_0
 scipy=0.15.1=np19py34_0
 setuptools=15.2=py34_0
 six=1.9.0=py34_0
+textblob=0.9.0=py34_0
 tornado=4.1=py34_0
 werkzeug=0.10.4=py34_0
