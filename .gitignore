@@ -4,3 +4,4 @@
 .idea
 data/*.gz
 *.txt
+temp/**/*.json

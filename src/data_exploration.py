@@ -1,5 +1,6 @@
 __author__ = 'Timur Gladkikh'
-from utils import *
+
+from stats import get_review_sample
 
 
 def main():
