@@ -1,50 +1,35 @@
 __author__ = 'Timur Gladkikh'
 
 import gzip
-import os
 import json
-from collections import defaultdict
+import dataset
+import os
+from stuf import stuf
 
 DATA_FILE = '../data/reviews_Movies_and_TV.json.gz'
-TEMP_FOLDER = '../temp/'
+DB_FILE = '../data/dataset.db'
+DB_URL = 'sqlite:///{0}'.format(DB_FILE)
 
+def parser():
+    if os.path.isfile(DB_FILE):
+        return dataset.connect(DB_URL, row_type=stuf)
 
-def parser(parameter):
-    counts = {
-        'positive': defaultdict(int),
-        'neutral': defaultdict(int),
-        'negative': defaultdict(int)
-    }
-
+    db = dataset.connect(DB_URL)
     with gzip.open(DATA_FILE, 'rb') as f:
-        for line in f:
-            line = eval(line)
-            obj_eval = line[parameter]
+        with db as tx:
+            for line in f:
+                data = eval(line)
+                tx['reviews'].insert(dict(
+                    reviewer_id=data['reviewerID'],
+                    movie=data['asin'],
+                    review_text=data['reviewText'],
+                    rating=data['overall']
+                ))
 
-            rating = line['overall']
-            rating_dir = ''
-
-            if rating < 2.5:
-                rating_dir = 'negative'
-                counts['negative'][obj_eval] += 1
-            elif 2.5 <= rating < 3.4:
-                rating_dir = 'neutral'
-                counts['neutral'][obj_eval] += 1
-            elif rating >= 3.5:
-                rating_dir = 'positive'
-                counts['positive'][obj_eval] += 1
-
-            review_dir = TEMP_FOLDER + rating_dir + '/'
-
-            if not os.path.exists(review_dir):
-                os.makedirs(review_dir)
-
-            temp_file = review_dir + obj_eval + '.json'
-            if os.path.isfile(temp_file):
-                line = [load_json(temp_file), line]
-            dump_json(line, temp_file)
-
-    dump_json(counts, TEMP_FOLDER + 'counts.json')
+    table = db['reviews']
+    table.create_index(['reviewer_id', 'rating'])
+    table.create_index(['rating'])
+    table.create_index(['reviewer_id'])
 
 
 def dump_json(obj, file):

@@ -1,9 +1,11 @@
 __author__ = 'Timur Gladkikh'
 
 from stats import get_review_sample
+from file_parser import parser
 
 
 def main():
+    parser()
     reviews = get_review_sample()
 
     # users_reviews_count(reviews)                      #Result => 2088647
