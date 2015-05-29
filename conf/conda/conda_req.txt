@@ -1,26 +1,31 @@
 # This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: win-64
+alembic=0.7.6=py34_0
 bokeh=0.9.0=np19py34_0
 colorama=0.3.3=py34_0
 cython=0.22=py34_0
+dataset=0.6.0=py34_0
 flask=0.10.1=py34_1
 greenlet=0.4.6=py34_0
 ipython=3.1.0=py34_0
 itsdangerous=0.24=py34_0
 jinja2=2.7.3=py34_2
 llvmlite=0.4.0=py34_0
+mako=1.0.1=py34_0
 markupsafe=0.23=py34_0
 nltk=3.0.2=np19py34_0
+normality=0.2.2=py34_0
 nose=1.3.6=py34_0
 numba=0.18.2=np19py34_1
 numpy=1.9.2=py34_0
 pandas=0.16.1=np19py34_0
+parse=1.6.6=py34_0
 pip=6.1.1=py34_0
-py=1.4.26=py34_0
+py=1.4.27=py34_0
 pygments=2.0.2=py34_0
 pyreadline=2.0=py34_0
-pytest=2.7.0=py34_0
+pytest=2.7.1=py34_0
 python=3.4.3=0
 python-dateutil=2.4.2=py34_0
 pytz=2015.4=py34_0
@@ -29,8 +34,11 @@ pyzmq=14.6.0=py34_0
 requests=2.7.0=py34_0
 scikit-learn=0.16.1=np19py34_0
 scipy=0.15.1=np19py34_0
-setuptools=15.2=py34_0
+setuptools=16.0=py34_0
 six=1.9.0=py34_0
+sqlalchemy=1.0.4=py34_0
+stuf=0.9.16=py34_0
 textblob=0.9.0=py34_0
 tornado=4.1=py34_0
+unidecode=0.4.17=py34_0
 werkzeug=0.10.4=py34_0

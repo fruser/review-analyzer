@@ -1,6 +1,8 @@
 *.pyc
 *.pickle
+*.db
 ~*.*
 .idea
 data/*.gz
 *.txt
+temp/**/*.json
