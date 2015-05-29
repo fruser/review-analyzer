@@ -3,32 +3,32 @@ __author__ = 'Timur Gladkikh'
 from file_parser import *
 
 
-def get_review_sample():
+def get_review_sample(size=20):
     db = parser()
 
     categories = {
-        'positive': 'rating >= 3.5',
-        'neutral': 'rating >= 2.5 AND rating < 3.5',
-        'negative': 'rating < 2.5'
+        'positive': 'rating > 3',
+        'neutral': 'rating = 3',
+        'negative': 'rating < 3'
     }
     with db as tx:
         for category in categories:
-            sql = 'SELECT reviewer_id, movie, review_text, rating, COUNT(reviewer_id) c ' \
+            sql = 'SELECT * ' \
                   'FROM reviews ' \
                   'WHERE {0} ' \
                   'GROUP BY reviewer_id ' \
-                  'ORDER BY c DESC'.format(categories[category])
+                  'HAVING COUNT(*) >= {1}'.format(categories[category], size)
             result = db.query(sql)
             for row in result:
-                if row.c >= 20:
-                    tx['sample'].insert(dict(
-                        reviewer_id=row.reviewer_id,
-                        movie=row.movie,
-                        review_text=row.review_text,
-                        rating=row.rating,
-                        category=category,
-                        count=row.c
-                    ))
+                tx['sample'].insert(dict(
+                    reviewer_id=row.reviewer_id,
+                    movie=row.movie,
+                    review_text=row.review_text,
+                    rating=row.rating,
+                    category=category
+                ))
+    create_index(db)
+
 
 def main():
     pass

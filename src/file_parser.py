@@ -26,6 +26,8 @@ def parser():
                     rating=data['overall']
                 ))
 
+
+def create_index(db):
     table = db['reviews']
     table.create_index(['reviewer_id', 'rating'])
     table.create_index(['rating'])

@@ -6,7 +6,7 @@ from file_parser import parser
 
 def main():
     parser()
-    reviews = get_review_sample()
+    get_review_sample()
 
     # users_reviews_count(reviews)                      #Result => 2088647
     # path = '../results/user_review.json'
