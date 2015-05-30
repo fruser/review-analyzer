@@ -6,3 +6,4 @@
 data/*.gz
 *.txt
 temp/**/*.json
+temp*
