@@ -8,10 +8,11 @@ from nltk.metrics import BigramAssocMeasures
 import string
 
 
-def get_tokens(text):
+def get_tokens(text, rem_stopwords=True, stopfile='english'):
+    exclude = stopwords.words(stopfile) if rem_stopwords else []
     text = text.lower()
     tokens = word_tokenize(text)
-    return [i for i in tokens if i not in string.punctuation]
+    return [i for i in tokens if i not in string.punctuation and exclude]
 
 
 def get_bag_of_words(word_list):
