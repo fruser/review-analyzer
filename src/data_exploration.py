@@ -1,17 +1,13 @@
 __author__ = 'Timur Gladkikh'
 
-from stats import get_review_sample
+from stats import *
 from file_parser import parser
 
 
 def main():
-    parser()
-    get_review_sample()
+    sample = get_review_sample(parser())
+    freq_words = most_freq_words(sample)
 
-    # users_reviews_count(reviews)                      #Result => 2088647
-    # path = '../results/user_review.json'
-    # json.dump(sorted_dict, open(path, 'w'))
-    # reviews_count(reviews)                            #Result => 4628130
 
 if __name__ == '__main__':
     main()
