@@ -10,7 +10,7 @@ import string
 
 def get_tokens(text_string, rem_stopwords=False, stopfile='english'):
     exclude = stopwords.words(stopfile) if rem_stopwords else []
-    punctuation = list(string.punctuation) + ['``', '\'\'']
+    punctuation = list(string.punctuation) + ['``', '\'\'', '--', '...']
     text_string = text_string.lower()
     tokens = word_tokenize(text_string)
     return [word for word in tokens if word not in (punctuation + exclude)]

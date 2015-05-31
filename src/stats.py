@@ -44,8 +44,18 @@ def most_freq_words(db, category='all', rating=0, rem_stopwords=True, top=10):
     :param top: Get the 'top' number of words. Defaults to 10 words
     """
     freq = defaultdict(int)
-    table = db.load_table('sample')
-    rows = table.all()
+    sql = 'SELECT * FROM sample ' \
+        if category == 'all' and rating == 0 \
+        else 'SELECT * FROM sample WHERE '
+
+    if category != 'all':
+        sql += ' category=\'{0}\' '.format(category)
+    if rating > 0:
+        if 'category' in sql:
+            sql += ' AND '
+        sql += ' rating={0} '.format(rating)
+
+    rows = db.query(sql)
     for row in rows:
         tokens = get_tokens(row.review_text, rem_stopwords=True) if rem_stopwords else get_tokens(row.review_text)
         freq = word_count(tokens, freq)
