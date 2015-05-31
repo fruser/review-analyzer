@@ -8,11 +8,12 @@ from nltk.metrics import BigramAssocMeasures
 import string
 
 
-def get_tokens(text, rem_stopwords=True, stopfile='english'):
+def get_tokens(text_string, rem_stopwords=False, stopfile='english'):
     exclude = stopwords.words(stopfile) if rem_stopwords else []
-    text = text.lower()
-    tokens = word_tokenize(text)
-    return [i for i in tokens if i not in string.punctuation and exclude]
+    punctuation = list(string.punctuation) + ['``', '\'\'']
+    text_string = text_string.lower()
+    tokens = word_tokenize(text_string)
+    return [word for word in tokens if word not in (punctuation + exclude)]
 
 
 def get_bag_of_words(word_list):
@@ -37,7 +38,7 @@ def get_text_label_features(text, feature_detector=get_bag_of_bigrams_words):
     label_feats = defaultdict(list)
     for label in text.categories:
         for fileid in text.fileids(categories=[label]):
-            feats = feature_detector(get_tokens(text.words(fileids=[fileid])))
+            feats = feature_detector(get_tokens(text.words(fileids=[fileid]), rem_stopwords=True))
             label_feats[label].append(feats)
     return label_feats
 

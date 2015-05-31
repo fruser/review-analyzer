@@ -47,7 +47,7 @@ def most_freq_words(db, category='all', rating=0, rem_stopwords=True, top=10):
     table = db.load_table('sample')
     rows = table.all()
     for row in rows:
-        tokens = get_tokens(row.review_text) if rem_stopwords else get_tokens(row.review_text, rem_stopwords=True)
+        tokens = get_tokens(row.review_text, rem_stopwords=True) if rem_stopwords else get_tokens(row.review_text)
         freq = word_count(tokens, freq)
 
     return sorted(freq.items(), key=operator.itemgetter(1), reverse=True)[0:top]
