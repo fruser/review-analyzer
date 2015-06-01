@@ -1,6 +1,9 @@
 __author__ = 'Timur Gladkikh'
 
 import operator
+from nltk.classify.scikitlearn import SklearnClassifier
+from sklearn.linear_model import LogisticRegression
+from nltk.classify.util import accuracy
 from file_parser import *
 from text_utils import *
 
@@ -69,6 +72,12 @@ def most_freq_words(db, category='all', rating=0, rem_stopwords=True, top=10):
         freq = word_count(tokens, freq)
 
     return sorted(freq.items(), key=operator.itemgetter(1), reverse=True)[0:top]
+
+
+def scikit_learn_classifier(train_features, test_features):
+    sk_classifier = SklearnClassifier(LogisticRegression())
+    sk_classifier.train(train_features)
+    return accuracy(sk_classifier, test_features)
 
 
 def main():

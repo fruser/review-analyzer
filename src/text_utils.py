@@ -34,7 +34,7 @@ def get_bag_of_bigrams_words(
     return get_bag_of_words(word_list + bigrams)
 
 
-def get_text_label_features(db, feature_detector=get_bag_of_bigrams_words):
+def get_text_label_features(db, feature_detector=get_bag_of_non_stopwords):
     label_feats = defaultdict(list)
 
     rows = db['sample'].all()
