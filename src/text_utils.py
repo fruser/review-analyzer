@@ -34,12 +34,15 @@ def get_bag_of_bigrams_words(
     return get_bag_of_words(word_list + bigrams)
 
 
-def get_text_label_features(text, feature_detector=get_bag_of_bigrams_words):
+def get_text_label_features(db, feature_detector=get_bag_of_bigrams_words):
     label_feats = defaultdict(list)
-    for label in text.categories:
-        for fileid in text.fileids(categories=[label]):
-            feats = feature_detector(get_tokens(text.words(fileids=[fileid]), rem_stopwords=True))
-            label_feats[label].append(feats)
+
+    rows = db['sample'].all()
+
+    for row in rows:
+        tokens = get_tokens(row.review_text, rem_stopwords=True)
+        features = feature_detector(tokens)
+        label_feats[row.category].append(features)
     return label_feats
 
 
