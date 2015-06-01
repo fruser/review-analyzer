@@ -6,6 +6,13 @@ from text_utils import *
 
 
 def get_review_sample(db, size=20):
+    """
+    Creates review sample from the dataset and stores it within the database under the
+    `sample` table. Each row also contains review category based on the assigned star rating
+    :param db: Reference to the SQLite dataset file
+    :param size: Number of reviews per user required in order to be included into the sample
+    :return: Returns reference to the sample database
+    """
     if db['sample'] is not None:
         return db
 
@@ -31,6 +38,7 @@ def get_review_sample(db, size=20):
                     category=category
                 ))
     create_index(db)
+    return db
 
 
 def most_freq_words(db, category='all', rating=0, rem_stopwords=True, top=10):

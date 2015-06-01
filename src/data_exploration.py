@@ -28,5 +28,9 @@ def main():
         print('Category: ', category)
         print(most_freq_words(sample, category=category))
 
+    temp = get_text_label_features(sample)
+    train, test = split_label_features(temp)
+
+
 if __name__ == '__main__':
     main()
