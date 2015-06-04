@@ -3,8 +3,9 @@ __author__ = 'Timur Gladkikh'
 import operator
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.linear_model import LogisticRegression
+from sklearn.naive_bayes import MultinomialNB
 from nltk.classify.util import accuracy
-from nltk import metrics
+import nltk
 from file_parser import *
 from text_utils import *
 
@@ -75,8 +76,13 @@ def most_freq_words(db, category='all', rating=0, rem_stopwords=True, top=10):
     return sorted(freq.items(), key=operator.itemgetter(1), reverse=True)[0:top]
 
 
-def scikit_learn_classifier(train_features):
+def log_regression_classifier(train_features):
     sk_classifier = SklearnClassifier(LogisticRegression())
+    return sk_classifier.train(train_features)
+
+
+def naive_bayes_classifier(train_features):
+    sk_classifier = SklearnClassifier(MultinomialNB())
     return sk_classifier.train(train_features)
 
 
@@ -93,8 +99,8 @@ def get_precision_recall(classifier, test_features):
     recalls = {}
 
     for label in classifier.labels():
-        precisions[label] = metrics.precision(ref_sets[label], test_sets[label])
-        recalls[label] = metrics.recall(ref_sets[label], test_sets[label])
+        precisions[label] = nltk.metrics.precision(ref_sets[label], test_sets[label])
+        recalls[label] = nltk.metrics.recall(ref_sets[label], test_sets[label])
 
     return precisions, recalls
 
