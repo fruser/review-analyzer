@@ -6,8 +6,13 @@ from file_parser import parser
 
 def print_results(lfeatures):
     train_set, test_set = split_label_features(lfeatures)
-    classifier = scikit_learn_classifier(train_set)
-    model_test(classifier, test_set)
+
+    classifier_lr = log_regression_classifier(train_set)
+    print('Linear Regression Classifier')
+    model_test(classifier_lr, test_set)
+    print('Naive Bayes Classifier')
+    classifier_nb = naive_bayes_classifier(train_set)
+    model_test(classifier_nb, test_set)
 
 
 def main():
@@ -40,8 +45,8 @@ def main():
     ft_detection = lambda words: get_bad_of_words_in_set(words, high_info_words)
     lfeatures_hiw = get_text_label_features(sample, feature_detector=ft_detection)
 
-    print_results(lfeatures_hiw)
     print_results(all_features)
+    print_results(lfeatures_hiw)
 
 
 if __name__ == '__main__':
