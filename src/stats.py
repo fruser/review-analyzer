@@ -86,7 +86,7 @@ def naive_bayes_classifier(train_features):
     return sk_classifier.train(train_features)
 
 
-def get_precision_recall_fmeasure(classifier, test_features):
+def get_precision_recall_fmeasure_conf_matrix(classifier, test_features):
     ref_sets = defaultdict(set)
     test_sets = defaultdict(set)
     ref_conf_matrix = []
@@ -114,7 +114,7 @@ def get_precision_recall_fmeasure(classifier, test_features):
 
 def model_test(classifier, test_features):
     print('Model Accuracy: {0}'.format(accuracy(classifier, test_features)))
-    precisions, recalls, f_measure, conf_matrix = get_precision_recall_fmeasure(classifier, test_features)
+    precisions, recalls, f_measure, conf_matrix = get_precision_recall_fmeasure_conf_matrix(classifier, test_features)
     print('Precisions: {0}'.format(precisions))
     print('Recalls: {0}'.format(recalls))
     print('F-Measure: {0}'.format(f_measure))
