@@ -7,3 +7,4 @@ data/*.gz
 *.txt
 temp/**/*.json
 temp*
+conf/api_keys/*
