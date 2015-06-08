@@ -20,7 +20,6 @@ def combine_response_result(result, response):
 def main():
     results_dir = '../results/vivekn/'
 
-    '''
     db = get_review_sample(parser())
     rows = db['sample'].all()
     payload = []
@@ -43,7 +42,6 @@ def main():
             payload.append(row.review_text)
             result[limit] = {'category': row.category}
             limit += 1
-    '''
 
     files = [file for file in os.listdir(results_dir) if os.path.isfile(results_dir + file)]
 
