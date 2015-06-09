@@ -18,12 +18,18 @@ def get_keys():
     return api_key, secret_key
 
 
-def get_api_result(session):
-    while True:
-        time.sleep(2)
-        result = session.getProcessedDocuments()
-        if len(result) != 0:
-            return result
+def get_api_result(session, session_length):
+    results = []
+    while len(results) < session_length:
+        time.sleep(3)
+        status = session.getProcessedDocuments()
+        results.extend(status)
+    return results
+
+
+# Really raw method to shorten the string
+def shorten_text(text):
+    return text[0:8190]
 
 
 def api_analyzer(api_key, secret_key, db):
@@ -38,29 +44,39 @@ def api_analyzer(api_key, secret_key, db):
     limit = 10
 
     for row in rows:
+        if len(row.review_text) >= 8191:
+            row.review_text = shorten_text(row.review_text)
         obj = get_uuid_obj(row.review_text)
         uuid_obj.append(obj)
         results[obj['id']] = {'category': row.category}
 
         if batch == limit - 1:
-            status = session.queueBatch(uuid_obj)
-            if status == 202:
-                api_result = get_api_result(session)
+            while True:
+                status = session.queueBatch(uuid_obj)
+                if status == 202:
+                    time.sleep(3)
+                    api_result = get_api_result(session, limit)
 
-                for i in range(0, len(api_result)):
-                    results[api_result[i]['id']]['api_result'] = api_result[i]['sentiment_polarity']
-            dump_json(results, '../results/semantria/semantria_api_{0}.json'.format(row.id))
-            batch = 0
+                    for i in range(0, len(api_result)):
+                        results[api_result[i]['id']]['api_result'] = api_result[i]['sentiment_polarity']
+                    dump_json(results, '../results/semantria/semantria_api_{0}.json'.format(row.id))
+                    batch = 0
+                    results = {}
+                    uuid_obj = []
+                    time.sleep(3)
+                    break
+                elif status > 300:
+                    print(status)
+                elif status is None:
+                    continue
         else:
             batch += 1
 
 
 def main():
-    '''
     api_key, secret_key = get_keys()
     db = get_review_sample(parser())
     api_analyzer(api_key, secret_key, db)
-    '''
 
     results_path = '../results/semantria/'
     files = [file for file in os.listdir(results_path) if os.path.isfile(results_path + file)]
@@ -72,8 +88,6 @@ def main():
             for key in json_data.keys():
                 analysis_result[key] = json_data[key]
     dump_json(analysis_result, results_path + 'overall_result.json')
-
-
 
 
 if __name__ == '__main__':

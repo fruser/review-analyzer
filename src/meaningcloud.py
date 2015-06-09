@@ -9,7 +9,7 @@ import time
 
 def post_request(payload):
     url = 'http://api.meaningcloud.com/sentiment-2.0'
-    time.sleep(1.5)
+    time.sleep(2)
     return json.loads(requests.post(url, data=payload).text)
 
 
@@ -33,10 +33,16 @@ def main():
                    'model': 'auto',
                    'txt': row.review_text}
         api_result = ''
-        try:
-            response = post_request(payload)['score_tag']
-        except:
-            response = ''
+
+        while True:
+            try:
+                response = post_request(payload)['score_tag']
+            except KeyError:
+                time.sleep(2)
+                continue
+            finally:
+                time.sleep(2)
+                break
 
         if response == 'P' or response == 'P+':
             api_result = 'positive'
@@ -46,7 +52,9 @@ def main():
             api_result = 'neutral'
         result[row.id] = {'db_result': row.category, 'api_result': api_result}
         if row.id % 10 == 0:
+            print(row.id)
             dump_json(result, results_dir + 'meaningcloud{0}.json'.format(row.id))
+            result = {}
 
     files = [file for file in os.listdir(results_dir) if os.path.isfile(results_dir + file)]
 
