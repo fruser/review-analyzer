@@ -4,6 +4,7 @@ import semantria
 import uuid
 import time
 import yaml
+import ssl
 from stats import *
 
 
@@ -22,7 +23,13 @@ def get_api_result(session, session_length):
     results = []
     while len(results) < session_length:
         time.sleep(3)
-        status = session.getProcessedDocuments()
+        status = []
+        while True:
+            try:
+                status = session.getProcessedDocuments()
+                break
+            except ssl.SSLError:
+                continue
         results.extend(status)
     return results
 
