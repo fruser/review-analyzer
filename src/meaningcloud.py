@@ -22,8 +22,8 @@ def get_api_key():
 
 def main():
     results_dir = '../results/meaningcloud/'
-    api_key = get_api_key()
 
+    api_key = get_api_key()
     db = get_review_sample(parser())
     rows = db['sample'].all()
     result = {}
@@ -47,6 +47,20 @@ def main():
         result[row.id] = {'db_result': row.category, 'api_result': api_result}
         if row.id % 10 == 0:
             dump_json(result, results_dir + 'meaningcloud{0}.json'.format(row.id))
+
+    files = [file for file in os.listdir(results_dir) if os.path.isfile(results_dir + file)]
+
+    db_result = []
+    api_result = []
+
+    for file in files:
+        with open(results_dir + file) as f:
+            json_data = json.load(f)
+            for key in json_data.keys():
+                db_result.append(json_data[key]['db_result'])
+                api_result.append(json_data[key]['api_result'])
+    conf_matrix = nltk.metrics.ConfusionMatrix(db_result, api_result)
+    print(conf_matrix)
 
 
 if __name__ == '__main__':
