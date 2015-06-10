@@ -4,7 +4,9 @@
 alembic=0.7.6=py34_0
 bokeh=0.9.0=np19py34_0
 certifi=14.05.14=py34_0
+cffi=1.1.0=py34_0
 colorama=0.3.3=py34_0
+cryptography=0.8.2=py34_0
 cython=0.22=py34_0
 dataset=0.6.0=py34_0
 flask=0.10.1=py34_1
@@ -24,7 +26,10 @@ pandas=0.16.1=np19py34_0
 parse=1.6.6=py34_0
 pip=7.0.3=py34_0
 py=1.4.27=py34_0
+pyasn1=0.1.7=py34_0
+pycparser=2.13=py34_0
 pygments=2.0.2=py34_0
+pyopenssl=0.15.1=py34_0
 pyreadline=2.0=py34_0
 pytest=2.7.1=py34_0
 python=3.4.3=0
@@ -35,7 +40,7 @@ pyzmq=14.6.0=py34_0
 requests=2.7.0=py34_0
 scikit-learn=0.16.1=np19py34_0
 scipy=0.15.1=np19py34_0
-semantria_sdk=3.0.70=py34_0
+semantria_sdk=3.8.80=py34_0
 setuptools=17.0=py34_0
 six=1.9.0=py34_0
 sqlalchemy=1.0.4=py34_0
