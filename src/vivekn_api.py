@@ -1,13 +1,7 @@
 __author__ = 'Timur Gladkikh'
 
-import requests
 from stats import *
-import nltk
-
-
-def post_request(payload):
-    url = 'http://sentiment.vivekn.com/api/batch/'
-    return json.loads(requests.post(url, data=json.dumps(payload)).text)
+from utils import *
 
 
 def combine_response_result(result, response):
@@ -19,6 +13,7 @@ def combine_response_result(result, response):
 
 def main():
     results_dir = '../results/vivekn/'
+    url = 'http://sentiment.vivekn.com/api/batch/'
 
     db = get_review_sample(parser())
     rows = db['sample'].all()
@@ -29,7 +24,7 @@ def main():
     batch = 0
     for row in rows:
         if limit == 500:
-            response = post_request(payload)
+            response = post_request(payload, url)
             result = combine_response_result(result, response)
 
             dump_json(result, results_dir + 'vivekn_batch{0}.json'.format(batch))
@@ -43,17 +38,8 @@ def main():
             result[limit] = {'category': row.category}
             limit += 1
 
-    files = [file for file in os.listdir(results_dir) if os.path.isfile(results_dir + file)]
+    db_result, api_result = merge_files(results_dir)
 
-    db_result = []
-    api_result = []
-
-    for file in files:
-        with open(results_dir + file) as f:
-            json_data = json.load(f)
-            for key in json_data.keys():
-                db_result.append(json_data[key]['category'])
-                api_result.append(json_data[key]['api_result'])
     conf_matrix = nltk.metrics.ConfusionMatrix(db_result, api_result)
     print(conf_matrix)
 

@@ -1,16 +1,8 @@
 __author__ = 'Timur Gladkikh'
 
-import requests
-from stats import *
 import yaml
-import nltk
-import time
-
-
-def post_request(payload):
-    url = 'http://api.meaningcloud.com/sentiment-2.0'
-    time.sleep(2)
-    return json.loads(requests.post(url, data=payload).text)
+from stats import *
+from utils import *
 
 
 def get_api_key():
@@ -22,6 +14,7 @@ def get_api_key():
 
 def main():
     results_dir = '../results/meaningcloud/'
+    url = 'http://api.meaningcloud.com/sentiment-2.0'
 
     api_key = get_api_key()
     db = get_review_sample(parser())
@@ -36,7 +29,7 @@ def main():
 
         while True:
             try:
-                response = post_request(payload)['score_tag']
+                response = post_request(payload, url, json_dumps=False)['score_tag']
             except KeyError:
                 time.sleep(2)
                 continue
@@ -50,23 +43,13 @@ def main():
             api_result = 'negative'
         elif response == 'NEU':
             api_result = 'neutral'
-        result[row.id] = {'db_result': row.category, 'api_result': api_result}
+        result[row.id] = {'category': row.category, 'api_result': api_result}
         if row.id % 10 == 0:
             print(row.id)
             dump_json(result, results_dir + 'meaningcloud{0}.json'.format(row.id))
             result = {}
 
-    files = [file for file in os.listdir(results_dir) if os.path.isfile(results_dir + file)]
-
-    db_result = []
-    api_result = []
-
-    for file in files:
-        with open(results_dir + file) as f:
-            json_data = json.load(f)
-            for key in json_data.keys():
-                db_result.append(json_data[key]['db_result'])
-                api_result.append(json_data[key]['api_result'])
+    db_result, api_result = merge_files(results_dir)
     conf_matrix = nltk.metrics.ConfusionMatrix(db_result, api_result)
     print(conf_matrix)
 
