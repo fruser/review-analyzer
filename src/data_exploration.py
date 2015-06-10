@@ -48,6 +48,8 @@ def main():
     print_results(all_features)
     print_results(lfeatures_hiw)
 
+    show_ratings_dist(sample)
+
 
 if __name__ == '__main__':
     main()

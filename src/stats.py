@@ -1,11 +1,12 @@
 __author__ = 'Timur Gladkikh'
 
 import operator
+import nltk
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from nltk.classify.util import accuracy
-import nltk
+from bokeh.charts import Bar, output_file, show
 from file_parser import *
 from text_utils import *
 
@@ -119,6 +120,22 @@ def model_test(classifier, test_features):
     print('Recalls: {0}'.format(recalls))
     print('F-Measure: {0}'.format(f_measure))
     print('Confusion Matrix: {0}'.format(conf_matrix))
+
+
+def show_ratings_dist(db):
+    output_file('../results/ratings_hist.html', title="Review Ratings Histogram")
+    rows = db['sample'].all()
+    freq = defaultdict(int)
+
+    for row in rows:
+        freq[str(row.rating)] += 1
+
+    bar = Bar({'y': list(freq.values())}, cat=list(freq.keys()),
+              title="Review Ratings Histogram",
+              ylabel="Frequency",
+              xlabel="Ratings",
+              width=800, height=800)
+    show(bar)
 
 
 def main():
