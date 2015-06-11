@@ -2,11 +2,14 @@ __author__ = 'Timur Gladkikh'
 
 import operator
 import nltk
+import numpy
+import pandas
+from collections import OrderedDict
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from nltk.classify.util import accuracy
-from bokeh.charts import Bar, output_file, show
+from bokeh.charts import Bar, output_file, show, Histogram
 from file_parser import *
 from text_utils import *
 
@@ -122,20 +125,32 @@ def model_test(classifier, test_features):
     print('Confusion Matrix: {0}'.format(conf_matrix))
 
 
-def show_ratings_dist(db):
-    output_file('../results/ratings_hist.html', title="Review Ratings Histogram")
-    rows = db['sample'].all()
-    freq = defaultdict(int)
-
+def show_ratings_dist(db, all_records=False):
+    records = 'reviews' if all_records else 'sample'
+    rows = db[records].all()
+    stars = []
     for row in rows:
-        freq[str(row.rating)] += 1
+        stars.append(row.rating)
 
-    bar = Bar({'y': list(freq.values())}, cat=list(freq.keys()),
-              title="Review Ratings Histogram",
-              ylabel="Frequency",
-              xlabel="Ratings",
-              width=800, height=800)
-    show(bar)
+    title_sample = 'Review Ratings Histogram ({0}), {1} records'.format(records, len(stars))
+    show_histogram(numpy.array(stars), title_sample)
+
+
+def show_histogram(values, title, filename='ratings_hist.html'):
+    output_file('../results/{0}'.format(filename), title=title)
+    distributions = OrderedDict(stars=values)
+    df = pandas.DataFrame(distributions)
+    distributions = df.to_dict()
+
+    for k, v in distributions.items():
+        distributions[k] = v.values()
+
+    hist = Histogram(df, bins=5, legend=True,
+                     title=title,
+                     ylabel="Frequency",
+                     xlabel="Ratings",
+                     width=800, height=800)
+    show(hist)
 
 
 def main():
