@@ -1,11 +1,15 @@
 __author__ = 'Timur Gladkikh'
 
 import operator
+import nltk
+import numpy
+import pandas
+from collections import OrderedDict
 from nltk.classify.scikitlearn import SklearnClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from nltk.classify.util import accuracy
-import nltk
+from bokeh.charts import Bar, output_file, show, Histogram
 from file_parser import *
 from text_utils import *
 
@@ -86,7 +90,7 @@ def naive_bayes_classifier(train_features):
     return sk_classifier.train(train_features)
 
 
-def get_precision_recall_fmeasure(classifier, test_features):
+def get_precision_recall_fmeasure_conf_matrix(classifier, test_features):
     ref_sets = defaultdict(set)
     test_sets = defaultdict(set)
     ref_conf_matrix = []
@@ -114,11 +118,40 @@ def get_precision_recall_fmeasure(classifier, test_features):
 
 def model_test(classifier, test_features):
     print('Model Accuracy: {0}'.format(accuracy(classifier, test_features)))
-    precisions, recalls, f_measure, conf_matrix = get_precision_recall_fmeasure(classifier, test_features)
+    precisions, recalls, f_measure, conf_matrix = get_precision_recall_fmeasure_conf_matrix(classifier, test_features)
     print('Precisions: {0}'.format(precisions))
     print('Recalls: {0}'.format(recalls))
     print('F-Measure: {0}'.format(f_measure))
     print('Confusion Matrix: {0}'.format(conf_matrix))
+
+
+def show_ratings_dist(db, all_records=False):
+    records = 'reviews' if all_records else 'sample'
+    rows = db[records].all()
+    stars = []
+    for row in rows:
+        stars.append(row.rating)
+
+    title = 'Review Ratings Histogram ({0}), {1} records'.format(records, len(stars))
+    filename = '{0}_hist.html'.format(records)
+    show_histogram(numpy.array(stars), title, filename)
+
+
+def show_histogram(values, title, filename):
+    output_file('../results/{0}'.format(filename), title=title)
+    distributions = OrderedDict(stars=values)
+    df = pandas.DataFrame(distributions)
+    distributions = df.to_dict()
+
+    for k, v in distributions.items():
+        distributions[k] = v.values()
+
+    hist = Histogram(df, bins=5, legend=True,
+                     title=title,
+                     ylabel="Frequency",
+                     xlabel="Ratings",
+                     width=800, height=800)
+    show(hist)
 
 
 def main():
