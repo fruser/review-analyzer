@@ -132,11 +132,12 @@ def show_ratings_dist(db, all_records=False):
     for row in rows:
         stars.append(row.rating)
 
-    title_sample = 'Review Ratings Histogram ({0}), {1} records'.format(records, len(stars))
-    show_histogram(numpy.array(stars), title_sample)
+    title = 'Review Ratings Histogram ({0}), {1} records'.format(records, len(stars))
+    filename = '{0}_hist.html'.format(records)
+    show_histogram(numpy.array(stars), title, filename)
 
 
-def show_histogram(values, title, filename='ratings_hist.html'):
+def show_histogram(values, title, filename):
     output_file('../results/{0}'.format(filename), title=title)
     distributions = OrderedDict(stars=values)
     df = pandas.DataFrame(distributions)

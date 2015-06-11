@@ -49,6 +49,7 @@ def main():
     print_results(lfeatures_hiw)
 
     show_ratings_dist(sample)
+    show_ratings_dist(sample, all_records=True)
 
 
 if __name__ == '__main__':
