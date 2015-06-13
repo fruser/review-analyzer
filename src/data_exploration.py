@@ -8,9 +8,10 @@ def print_results(lfeatures):
     train_set, test_set = split_label_features(lfeatures)
 
     classifier_lr = log_regression_classifier(train_set)
-    print('Linear Regression Classifier')
+    print('\nLinear Regression Classifier')
     model_test(classifier_lr, test_set)
-    print('Naive Bayes Classifier')
+
+    print('\nNaive Bayes Classifier')
     classifier_nb = naive_bayes_classifier(train_set)
     model_test(classifier_nb, test_set)
 
@@ -31,12 +32,12 @@ def main():
 
     print('\nTop 10 most frequent words based on star ratings:')
     for star in stars:
-        print('Star# ', star)
+        print('Star/s:', star)
         print(most_freq_words(sample, rating=star))
 
     print('\nTop 10 most frequent words based on categories:')
     for category in categories:
-        print('Category: ', category)
+        print('Category:', category)
         print(most_freq_words(sample, category=category))
 
     all_features = get_text_label_features(sample)

@@ -64,6 +64,8 @@ def split_label_features(lfeats, split=0.75):
 def word_count(words, existing_list=None):
     result = existing_list if existing_list else defaultdict(int)
     for word in words:
+        if word == '\'s':
+            continue
         result['{0}'.format(word)] += 1
     return result
 
@@ -80,16 +82,16 @@ def get_high_information_words(lwords, score_fn=BigramAssocMeasures.chi_sq, min_
                 word_freq_dist[word] += 1
                 label_word_freq_dist[label][word] += 1
 
-    n_xx = label_word_freq_dist.N()
+    n_words_total = label_word_freq_dist.N()
     high_info_words = set()
 
     for label in label_word_freq_dist.conditions():
-        n_xi = label_word_freq_dist[label].N()
+        n_words_label = label_word_freq_dist[label].N()
         word_scores = defaultdict(int)
 
-        for word, n_ii in label_word_freq_dist[label].items():
-            n_ix = word_freq_dist[word]
-            score = score_fn(n_ii, (n_ix, n_xi), n_xx)
+        for word, word_freq_label in label_word_freq_dist[label].items():
+            word_freq = word_freq_dist[word]
+            score = score_fn(word_freq_label, (word_freq, n_words_label), n_words_total)
             word_scores[word] = score
 
         bestwords = [word for word, score in word_scores.items() if score >= min_score]
